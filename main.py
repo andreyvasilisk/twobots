@@ -37,7 +37,7 @@ def check_car(link):
         cars_mem = pickle.load(f)
     if link not in cars_mem:
         cars_mem.append(link)
-        cars_mem = cars_mem[-100:]
+        cars_mem = cars_mem[-15:]
         with open('cars.txt', 'wb') as f:
             pickle.dump(cars_mem, f)
         return True
@@ -149,21 +149,20 @@ def main2():
             r = requests.get('https://auktion.biliaoutlet.se/Home/Search?Search=&submit-button=Sök')
             soup = BeautifulSoup(r.text, 'lxml')
             cars = soup.find_all(class_='card') + BeautifulSoup(requests.get('https://auktion.biliaoutlet.se').text, 'lxml').find_all(class_='card')
-            car = cars[0]
-            if check_car(get_link(car)):
-                #print(get_name(car))
-                with open('users.pickle', 'rb') as f:
-                    users = pickle.load(f)
-                for user in users:
-                    try:
-                        bot2.send_message(user, f"Название: {get_name(car)}\nЦена: {get_price(car)}\nСсылка: {get_link(car)}") #user
-                        #print(f"Название: {get_name(car)}\nЦена: {get_price(car)}\nСсылка: {get_link(car)}")
-                    except Exception as ex:
-                        pass
+            for car in cars[:5]:
+                if check_car(get_link(car)):
+                    with open('users.pickle', 'rb') as f:
+                        users = pickle.load(f)
+                    for user in users:
+                        try:
+                            bot2.send_message(user, f"Название: {get_name(car)}\nЦена: {get_price(car)}\nСсылка: {get_link(car)}") #user
+                            #print(f"Название: {get_name(car)}\nЦена: {get_price(car)}\nСсылка: {get_link(car)}")
+                        except Exception as ex:
+                            pass
         except Exception as ex:
-            print(ex)
-            time.sleep(3)
-        time.sleep(2)
+            print("auktion error: " + str(ex))
+            time.sleep(4)
+        time.sleep(3)
 
             
 bitbil = threading.Thread(target=main1)
