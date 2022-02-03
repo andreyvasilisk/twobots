@@ -37,7 +37,7 @@ def check_car(link):
         cars_mem = pickle.load(f)
     if link not in cars_mem:
         cars_mem.append(link)
-        cars_mem = cars_mem[-15:]
+        cars_mem = cars_mem[-30:]
         with open('cars.txt', 'wb') as f:
             pickle.dump(cars_mem, f)
         return True
@@ -69,8 +69,8 @@ def check_car2(link):
         cars_mem = pickle.load(f)
     if link not in cars_mem:
         cars_mem.append(link)
-        if len(cars_mem) > 30:
-            cars_mem = cars_mem[-20:]
+        if len(cars_mem) > 100:
+            cars_mem = cars_mem[-100:]
         with open('cars.dat', 'wb') as f:
             pickle.dump(cars_mem, f)
         return True
@@ -109,7 +109,7 @@ def main1():
                         print("smth")
                 time.sleep(1.5)
 
-            time.sleep(3)
+            time.sleep(2)
                 
             #filters2 parser
             for car_filter in filters2:
@@ -118,7 +118,6 @@ def main1():
                 #print(use_link)
                 soup = BeautifulSoup(requests.get(use_link).text, 'lxml')
                 all_cars = soup.find_all('ul', class_ = 'result-list uk-padding-remove')
-                #print(all_cars)
                 for car in all_cars:
                     car_link = "https://www.bytbil.com" + car.find(class_='uk-width-medium-3-4').find('a').get('href')
                     if check_car(car_link):
@@ -149,7 +148,7 @@ def main2():
             r = requests.get('https://auktion.biliaoutlet.se/Home/Search?Search=&submit-button=Sök')
             soup = BeautifulSoup(r.text, 'lxml')
             cars = soup.find_all(class_='card') + BeautifulSoup(requests.get('https://auktion.biliaoutlet.se').text, 'lxml').find_all(class_='card')
-            for car in cars[:5]:
+            for car in cars[:4]:
                 if check_car(get_link(car)):
                     with open('users.pickle', 'rb') as f:
                         users = pickle.load(f)
@@ -159,10 +158,17 @@ def main2():
                             #print(f"Название: {get_name(car)}\nЦена: {get_price(car)}\nСсылка: {get_link(car)}")
                         except Exception as ex:
                             pass
+            check_car(get_link(cars[4]))
+            check_car(get_link(cars[5]))
+            check_car(get_link(cars[6]))
+            check_car(get_link(cars[7]))
+            
         except Exception as ex:
+            print("===================================================")
             print("auktion error: " + str(ex))
-            time.sleep(4)
-        time.sleep(3)
+            print("===================================================")
+            time.sleep(10)
+        time.sleep(4)
 
             
 bitbil = threading.Thread(target=main1)
