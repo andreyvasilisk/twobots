@@ -106,7 +106,7 @@ def main1():
                                 except:
                                     print(f"Local error: {ex}")
                     else:
-                        break
+                        print("smth")
                 time.sleep(1.5)
 
             time.sleep(3)
@@ -155,8 +155,8 @@ def main2():
                         users = pickle.load(f)
                     for user in users:
                         try:
-                            bot2.send_message(user, f"Название: {get_name(car)}\nЦена: {get_price(car)}\nСсылка: {get_link(car)}") #user
-                            #print(f"Название: {get_name(car)}\nЦена: {get_price(car)}\nСсылка: {get_link(car)}")
+                            #bot2.send_message(user, f"Название: {get_name(car)}\nЦена: {get_price(car)}\nСсылка: {get_link(car)}") #user
+                            print(f"Название: {get_name(car)}\nЦена: {get_price(car)}\nСсылка: {get_link(car)}")
                         except Exception as ex:
                             pass
         except Exception as ex:
